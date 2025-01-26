@@ -1,11 +1,17 @@
 {
     "version": 2,
-    "buildCommand": "npm run migration:run && npm run build",
+    "builds": [
+        {
+            "src": "src/main.ts",
+            "use": "@vercel/node"
+        }
+    ],
+    "buildCommand": "npm run migrate && npm run build", 
     "outputDirectory": "dist",
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "src/main.ts"
+            "destination": "/dist/main.ts"
         }
     ],
     "headers": [
