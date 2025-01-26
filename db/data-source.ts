@@ -8,6 +8,7 @@ dotenv.config();
 
 const isDev = process.env.NODE_ENV?.trim() === 'dev';
 const isProd = process.env.NODE_ENV?.trim() === 'prod';
+const isLocal = process.env.NODE_ENV?.trim() === 'local';
 
 // console.log(isDev);
 // console.log(isProd);
@@ -49,7 +50,14 @@ const devConfig: DataSourceOptions = {
   migrationsTableName: 'migration_table',
 };
 
-const dataSourceOptions: DataSourceOptions = (isDev || isProd) ? (isDev ? devConfig : prodConfig) : localConfig;
+const dataSourceOptions: DataSourceOptions = isProd 
+  ? prodConfig 
+  : isDev 
+    ? devConfig 
+    : isLocal 
+      ? localConfig 
+      : localConfig;
+
 
 const dataSource = new DataSource(dataSourceOptions);
 export default dataSource;
