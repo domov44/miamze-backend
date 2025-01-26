@@ -5,7 +5,7 @@
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "dist/src/main.ts"
+            "destination": "/dist/src/main.ts"
         }
     ],
     "headers": [
