@@ -12,7 +12,7 @@ const isProd = process.env.NODE_ENV?.trim() === 'prod';
 // console.log(isDev);
 // console.log(isProd);
 
-const devConfig: DataSourceOptions = {
+const localConfig: DataSourceOptions = {
   type: 'postgres',
   host: 'localhost',
   port: 5431,
@@ -27,7 +27,7 @@ const devConfig: DataSourceOptions = {
 
 const prodConfig: DataSourceOptions = {
   type: 'postgres',
-  url: process.env.DATABASE_URL,
+  url: process.env.PROD_DATABASE_URL,
   ssl: {
     rejectUnauthorized: false,
   },
@@ -37,7 +37,19 @@ const prodConfig: DataSourceOptions = {
   migrationsTableName: 'migration_table',
 };
 
-const dataSourceOptions: DataSourceOptions = isProd ? prodConfig : devConfig;
+const devConfig: DataSourceOptions = {
+  type: 'postgres',
+  url: process.env.DEV_DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+  entities: ['dist/**/*.entity{.ts,.js}'],
+  synchronize: false,
+  migrations: ['dist/db/migrations/*.js'],
+  migrationsTableName: 'migration_table',
+};
+
+const dataSourceOptions: DataSourceOptions = (isDev || isProd) ? (isDev ? devConfig : prodConfig) : localConfig;
 
 const dataSource = new DataSource(dataSourceOptions);
 export default dataSource;
