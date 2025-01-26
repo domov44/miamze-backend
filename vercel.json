@@ -5,7 +5,7 @@
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/dist/src/main.js"
+            "destination": "dist/src/main.js"
         }
     ],
     "headers": [
