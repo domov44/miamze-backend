@@ -1,0 +1,13 @@
+services:
+  postgres:
+    container_name: miamzeBDD
+    image: library/postgres:13.3
+#    volumes:
+#      - ./docker/db/dump:/docker-entrypoint-initdb.d
+#      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: 'miamze'
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'root'
+    ports:
+      - "5431:5432"
