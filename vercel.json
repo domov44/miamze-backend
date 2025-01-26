@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "buildCommand": "npm run migration:run && npm run build && nest start",
+    "buildCommand": "npm run migration:run && npm run build",
     "outputDirectory": "dist",
     "rewrites": [
         {
