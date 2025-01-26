@@ -1,11 +1,11 @@
 {
     "version": 2,
-    "buildCommand": "npm run migrate && npm run build", 
+    "buildCommand": "npm run migration:run && npm run build", 
     "outputDirectory": "dist",
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/dist/main.ts"
+            "destination": "dist/src/main.ts"
         }
     ],
     "headers": [
