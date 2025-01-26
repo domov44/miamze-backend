@@ -6,8 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "npm run migration:run && nest build",
-    "prebuild": "npm run migration:run",
+    "build": "test command ramdom",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "set NODE_ENV=prod && node dist/src/main",
     "start:dev": "set NODE_ENV=dev && nest start --watch",
