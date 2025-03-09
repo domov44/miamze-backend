@@ -7,11 +7,14 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   JoinTable,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from 'src/users/entities/user.entity';
 import { Exclude, Expose } from 'class-transformer';
 import { Tag, GROUP_TAG, GROUP_ALL_TAGS } from 'src/tags/entities/tag.entity';
+import { RecipeIngredient } from 'src/recipe-ingredient/entities/recipe-ingredient.entity';
 
 export const GROUP_CATEGORY = 'group_category_details';
 export const GROUP_ALL_CATEGORIES = 'group_all_categories';
@@ -19,7 +22,7 @@ export const GROUP_ALL_CATEGORIES = 'group_all_categories';
 @Entity()
 export class Recipe {
   @ApiProperty({
-    description: "Identifiant unique de la catégorie",
+    description: "Identifiant unique de la recette",
     example: 1,
   })
   @PrimaryGeneratedColumn()
@@ -27,15 +30,15 @@ export class Recipe {
   id: number;
 
   @ApiProperty({
-    description: 'Label de la catégorie',
-    example: 'Code'
+    description: 'Nom de la recette',
+    example: 'Tarte aux pommes'
   })
   @Column({ length: 500 })
   @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
   label: string;
 
   @ApiProperty({
-    description: "Date de création de la catégorie",
+    description: "Date de création de la recette",
     example: '2023-10-01T10:00:00Z',
   })
   @CreateDateColumn({ name: 'created_at' })
@@ -43,7 +46,7 @@ export class Recipe {
   createdAt: Date;
 
   @ApiProperty({
-    description: "Date de dernière mise à jour de la catégorie",
+    description: "Date de dernière mise à jour de la recette",
     example: '2023-10-05T14:00:00Z',
   })  
   @UpdateDateColumn({ name: 'updated_at' })
@@ -51,22 +54,42 @@ export class Recipe {
   updatedAt: Date;
 
   @ApiProperty({
-    description: 'Slug de la catégorie',
-    example: 'code'
+    description: 'Slug de la recette',
+    example: 'tarte-aux-pommes'
   })
+  @Column()
   @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
   slug: string;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.recipes)
-  @Exclude()
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @ApiProperty({ type: () => Tag, isArray: true })
-  @ManyToMany(() => Tag, (tag) => tag.recipes)
+  @ManyToMany(() => Tag, (tag) => tag.recipes, { cascade: true })
   @JoinTable()
   @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
   tags: Tag[];
+
+  @ApiProperty({ type: () => RecipeIngredient, isArray: true })
+  @OneToMany(() => RecipeIngredient, (recipeIngredient) => recipeIngredient.recipe, { cascade: true })
+  recipeIngredients: RecipeIngredient[];
+
+   @ApiProperty({
+    description: "Étapes de la recette sous forme de JSON",
+    example: [
+      {
+        name: "Préchauffer le four",
+        description: "Préchauffer le four à 180°C pendant 20 minutes en chaleur tournante",
+        duration: 20,
+        preparation: false,
+      }
+    ],
+  })
+  @Column('jsonb', { nullable: true })
+  @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
+  steps: { name: string, description: string, duration: number, preparation: boolean }[];
 
   constructor(partial: Partial<Recipe>) {
     Object.assign(this, partial);

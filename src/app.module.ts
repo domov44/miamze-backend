@@ -11,6 +11,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration, { loadEnvironment } from '../config/configuration';
 import { TagsModule } from './tags/tags.module';
 import { RecipesModule } from './recipes/recipes.module';
+import { IngredientsModule } from './ingredients/ingredients.module';
+import { RecipeIngredientModule } from './recipe-ingredient/recipe-ingredient.module';
 
 @Module({
   imports: [
@@ -26,15 +28,13 @@ import { RecipesModule } from './recipes/recipes.module';
     }),
     TagsModule,
     RecipesModule,
+    IngredientsModule,
+    RecipeIngredientModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     ConfigService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
   ],
 })
 export class AppModule { }
