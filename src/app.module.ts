@@ -35,6 +35,10 @@ import { RecipeIngredientModule } from './recipe-ingredient/recipe-ingredient.mo
   providers: [
     AppService,
     ConfigService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule { }
