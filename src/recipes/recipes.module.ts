@@ -1,19 +1,15 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { RecipesService } from './recipes.service';
-import { RecipesController } from './recipes.controller';
-import { UsersModule } from 'src/users/users.module';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Recipe } from './entities/recipe.entity';
-import { TagsModule } from 'src/tags/tags.module';
+import { RecipesService } from 'src/recipes/recipes.service';
+import { RecipesController } from 'src/recipes/recipes.controller';
+import { Recipe } from 'src/recipes/entities/recipe.entity';
+import { RecipeIngredient } from 'src/recipe-ingredient/entities/recipe-ingredient.entity';
+import { Ingredient } from 'src/ingredients/entities/ingredient.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Recipe]),
-    UsersModule,
-    forwardRef(() => TagsModule),
-  ],
+  imports: [TypeOrmModule.forFeature([Recipe, RecipeIngredient, Ingredient])],
   controllers: [RecipesController],
   providers: [RecipesService],
-  exports: [RecipesService, TypeOrmModule],
 })
 export class RecipesModule {}
+

@@ -1,107 +1,54 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Request,
-  SerializeOptions,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Request, Put, SerializeOptions } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
-import { Recipe, GROUP_ALL_CATEGORIES, GROUP_CATEGORY } from './entities/recipe.entity';
-import { ApiCreatedResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { AuthGuard } from '../auth/auth.guard';
-import { Tag } from 'src/tags/entities/tag.entity';
-import { In, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { GROUP_TAG } from 'src/tags/entities/tag.entity';
+import { GROUP_CATEGORY } from './entities/recipe.entity';
+import { GROUP_ALL_USERS, GROUP_USER } from 'src/users/entities/user.entity';
 
 @Controller('recipes')
-@ApiTags('Recipes')
 export class RecipesController {
-  constructor(private readonly RecipesService: RecipesService,
-    @InjectRepository(Tag)
-    private readonly tagRepository: Repository<Tag>,) { }
+  constructor(private readonly recipesService: RecipesService) { }
 
-  @UseGuards(AuthGuard)
-  @Get()
-  @SerializeOptions({
-    groups: [GROUP_ALL_CATEGORIES],
-  })
-  async findAll(
-    @Request() req,
-  ): Promise<Recipe[]> {
-    const userId = req.user.sub;
-    return this.RecipesService.findAll(userId);
-  }
-  
   @UseGuards(AuthGuard)
   @Post()
-  @ApiBearerAuth()
-  @ApiCreatedResponse({
-    description: 'Recipe created successfully and linked to the user.',
-    type: Recipe,
-  })
   @SerializeOptions({
-    groups: [GROUP_CATEGORY],
+    groups: [GROUP_TAG, GROUP_CATEGORY, GROUP_USER, GROUP_ALL_USERS],
   })
-  async create(@Body() createCategoryDto: CreateRecipeDto, @Request() req) {
-    const userId = req.user.sub;
-
-    const foundTags = await this.tagRepository.findBy({
-      id: In(createCategoryDto.tags),
-    });
-
-    return this.RecipesService.create(createCategoryDto, userId, foundTags);
+  create(@Body() createRecipeDto: CreateRecipeDto, @Request() req) {
+    return this.recipesService.create(createRecipeDto, req.user.sub);
   }
 
-
-  @UseGuards(AuthGuard)
-  @Get(':id')
+  @Get()
   @SerializeOptions({
-    groups: [GROUP_CATEGORY],
+    groups: [GROUP_TAG, GROUP_CATEGORY, GROUP_USER, GROUP_ALL_USERS],
   })
-  async findOne(@Param('id') id: string, @Request() req): Promise<Recipe> {
-    const userId = req.user.sub;
-    return this.RecipesService.findOne(+id, userId);
+  findAll() {
+    return this.recipesService.findAll();
   }
 
-  @UseGuards(AuthGuard)
-  @Patch(':id')
-  @ApiBearerAuth()
+  @Get(':username/:slug')
   @SerializeOptions({
-    groups: [GROUP_CATEGORY],
+    groups: [GROUP_TAG, GROUP_CATEGORY, GROUP_USER, GROUP_ALL_USERS],
   })
-  @ApiCreatedResponse({
-    description: 'Recipe updated successfully.',
-    type: Recipe,
-  })
-  async update(
-    @Param('id') id: string,
-    @Body() updateRecipeDto: UpdateRecipeDto,
-    @Request() req,
+  async findOneByUsernameAndSlug(
+    @Param('username') username: string,
+    @Param('slug') slug: string
   ) {
-    const userId = req.user.sub;
-    const tags: Tag[] = updateRecipeDto.tags;
-    return this.RecipesService.update(+id, updateRecipeDto, userId, tags);
+    return this.recipesService.findOneByUsernameAndSlug(username, slug);
+  }
+
+
+  @UseGuards(AuthGuard)
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto, @Request() req) {
+    return this.recipesService.update(+id, updateRecipeDto, req.user.sub);
   }
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  @ApiBearerAuth()
-  @SerializeOptions({
-    groups: [GROUP_CATEGORY],
-  })
-  @ApiCreatedResponse({
-    description: 'Recipe deleted successfully.',
-    type: Recipe,
-  })
-  async remove(@Param('id') id: string, @Request() req) {
-    const userId = req.user.sub;
-    return this.RecipesService.remove(+id, userId);
+  remove(@Param('id') id: string, @Request() req) {
+    return this.recipesService.remove(+id, req.user.sub);
   }
 }
