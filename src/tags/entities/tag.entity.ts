@@ -3,15 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  ManyToOne,
   UpdateDateColumn,
   ManyToMany,
-  JoinTable,
 } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { GROUP_CATEGORY, GROUP_ALL_CATEGORIES, Recipe } from 'src/recipes/entities/recipe.entity';
-import { Exclude, Expose } from 'class-transformer';
+import { Expose } from 'class-transformer';
+import { GROUP_ALL_CATEGORIES, GROUP_CATEGORY, Recipe } from '../../recipes/entities/recipe.entity';
+import { User } from '../../users/entities/user.entity';
 
 export const GROUP_TAG = 'group_tag_details';
 export const GROUP_ALL_TAGS = 'group_all_tags';

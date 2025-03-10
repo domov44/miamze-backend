@@ -5,8 +5,6 @@ import { UsersModule } from './users/users.module';
 import { dataSourceOptions } from '../db/data-source';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './auth/auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration, { loadEnvironment } from '../config/configuration';
 import { TagsModule } from './tags/tags.module';
@@ -35,11 +33,6 @@ import { RecipeIngredientModule } from './recipe-ingredient/recipe-ingredient.mo
   providers: [
     AppService,
     ConfigService,
-    
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
   ],
 })
 export class AppModule { }

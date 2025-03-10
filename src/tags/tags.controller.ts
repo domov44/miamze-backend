@@ -21,7 +21,7 @@ import { AuthGuard } from '../auth/auth.guard';
 // import { plainToInstance } from 'class-transformer';
 import { GROUP_ALL_TAGS, GROUP_TAG, Tag } from './entities/tag.entity';
 import { UsersService } from '../users/users.service';
-import { GROUP_ALL_CATEGORIES, GROUP_CATEGORY } from 'src/recipes/entities/recipe.entity';
+import { GROUP_ALL_CATEGORIES, GROUP_CATEGORY } from '../recipes/entities/recipe.entity';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('tags')
