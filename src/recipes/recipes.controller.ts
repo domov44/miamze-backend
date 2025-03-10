@@ -2,10 +2,11 @@ import { Controller, Get, Post, Body, Param, Delete, UseGuards, Request, Put, Se
 import { RecipesService } from './recipes.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { GROUP_TAG } from 'src/tags/entities/tag.entity';
 import { GROUP_CATEGORY } from './entities/recipe.entity';
-import { GROUP_ALL_USERS, GROUP_USER } from 'src/users/entities/user.entity';
+import { GROUP_ALL_USERS, GROUP_USER } from '../users/entities/user.entity';
+import { AuthGuard } from '../auth/auth.guard';
+import { GROUP_TAG } from '../tags/entities/tag.entity';
+
 
 @Controller('recipes')
 export class RecipesController {

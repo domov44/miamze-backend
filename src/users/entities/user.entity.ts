@@ -11,8 +11,8 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
-import { GROUP_ALL_CATEGORIES, GROUP_CATEGORY, Recipe } from 'src/recipes/entities/recipe.entity';
-import { GROUP_ALL_TAGS, GROUP_TAG, Tag } from 'src/tags/entities/tag.entity';
+import { GROUP_ALL_CATEGORIES, GROUP_CATEGORY, Recipe } from '../../recipes/entities/recipe.entity';
+import { GROUP_ALL_TAGS, GROUP_TAG, Tag } from '../../tags/entities/tag.entity';
 
 export const GROUP_USER = 'group_user_details';
 export const GROUP_ALL_USERS = 'group_all_users';

@@ -11,10 +11,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/users/entities/user.entity';
-import { Exclude, Expose } from 'class-transformer';
-import { Tag, GROUP_TAG, GROUP_ALL_TAGS } from 'src/tags/entities/tag.entity';
-import { RecipeIngredient } from 'src/recipe-ingredient/entities/recipe-ingredient.entity';
+import { User } from '../../users/entities/user.entity';
+import { Expose } from 'class-transformer';
+import { Tag, GROUP_TAG, GROUP_ALL_TAGS } from '../../tags/entities/tag.entity';
+import { RecipeIngredient } from '../../recipe-ingredient/entities/recipe-ingredient.entity';
 
 export const GROUP_CATEGORY = 'group_category_details';
 export const GROUP_ALL_CATEGORIES = 'group_all_categories';

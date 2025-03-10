@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { TagsController } from './tags.controller';
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from '../users/users.module';
 import { Tag } from './entities/tag.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RecipesModule } from 'src/recipes/recipes.module';
+import { RecipesModule } from '../recipes/recipes.module';
 
 @Module({
   imports: [
