@@ -2,12 +2,12 @@ import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/commo
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
-import { User } from 'src/users/entities/user.entity';
-import { RecipeIngredient } from 'src/recipe-ingredient/entities/recipe-ingredient.entity';
-import { Ingredient } from 'src/ingredients/entities/ingredient.entity';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import slugify from 'slugify';
+import { RecipeIngredient } from '../recipe-ingredient/entities/recipe-ingredient.entity';
+import { Ingredient } from '../ingredients/entities/ingredient.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class RecipesService {

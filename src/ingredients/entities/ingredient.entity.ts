@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { RecipeIngredient } from 'src/recipe-ingredient/entities/recipe-ingredient.entity';
 import { Expose } from 'class-transformer';
+import { RecipeIngredient } from '../../recipe-ingredient/entities/recipe-ingredient.entity';
 
 @Entity()
 export class Ingredient {
