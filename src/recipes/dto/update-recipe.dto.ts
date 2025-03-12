@@ -1,7 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateRecipeDto } from './create-recipe.dto';
-import { Tag } from 'src/tags/entities/tag.entity';
 import { IsArray, IsInt, IsOptional, IsString, Matches } from 'class-validator';
+import { Tag } from '../../tags/entities/tag.entity';
 
 export class UpdateRecipeDto extends PartialType(CreateRecipeDto) {
   @ApiProperty({
