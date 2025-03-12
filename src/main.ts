@@ -16,12 +16,14 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      '*'
+      'http://localhost:3000',
+      'https://miamze.com',
+      'https://develop-miamze-frontend.vercel.app',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
-  });
-  
+  });  
 
   const config = new DocumentBuilder()
     .setTitle('My api')
@@ -31,6 +33,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  await app.listen(8000);
 }
 bootstrap();
