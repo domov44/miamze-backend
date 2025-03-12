@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 
 export default () => ({
   isGlobal: true,
-  port: parseInt(process.env.PORT, 10) || 3000,
+  port: parseInt(process.env.PORT, 10) || 8000,
   database: {
     host: process.env.DATABASE_HOST,
     port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
