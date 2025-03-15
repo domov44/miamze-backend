@@ -15,6 +15,7 @@ import { User } from '../../users/entities/user.entity';
 import { Expose } from 'class-transformer';
 import { Tag, GROUP_TAG, GROUP_ALL_TAGS } from '../../tags/entities/tag.entity';
 import { RecipeIngredient } from '../../recipe-ingredient/entities/recipe-ingredient.entity';
+import { Category } from '../../category/entities/category.entity';
 
 export const GROUP_CATEGORY = 'group_category_details';
 export const GROUP_ALL_CATEGORIES = 'group_all_categories';
@@ -36,6 +37,14 @@ export class Recipe {
   @Column({ length: 500 })
   @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
   label: string;
+
+  @ApiProperty({
+    description: 'Chemin image de la recette',
+    example: 'https://www.image.com/mon-image.avif'
+  })
+  @Column({ length: 500 })
+  @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
+  image: string;
 
   @ApiProperty({
     description: "Date de création de la recette",
@@ -60,6 +69,11 @@ export class Recipe {
   @Column()
   @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
   slug: string;
+
+  @ApiProperty({ type: () => Category })
+  @JoinColumn({ name: 'categoryId' })
+  @ManyToOne(() => Category, (category) => category.recipes, { nullable: true, onDelete: 'CASCADE' })
+  category: Category;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.recipes)

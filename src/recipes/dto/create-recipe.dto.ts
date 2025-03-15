@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsArray, ValidateNested, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsArray, ValidateNested, IsOptional, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class RecipeIngredientDto {
@@ -29,6 +29,10 @@ export class CreateRecipeDto {
   @IsString()
   @IsNotEmpty()
   label: string;
+
+  @IsInt()
+  @IsNotEmpty()
+  categoryId: number;  
 
   @IsArray()
   @ValidateNested({ each: true })
