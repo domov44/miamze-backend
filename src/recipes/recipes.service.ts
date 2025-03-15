@@ -8,6 +8,7 @@ import slugify from 'slugify';
 import { RecipeIngredient } from '../recipe-ingredient/entities/recipe-ingredient.entity';
 import { Ingredient } from '../ingredients/entities/ingredient.entity';
 import { User } from '../users/entities/user.entity';
+import { Category } from '../category/entities/category.entity';
 
 @Injectable()
 export class RecipesService {
@@ -18,29 +19,38 @@ export class RecipesService {
     private recipeIngredientRepository: Repository<RecipeIngredient>,
     @InjectRepository(Ingredient)
     private ingredientRepository: Repository<Ingredient>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Ingredient>,
   ) { }
 
   async create(createRecipeDto: CreateRecipeDto, user: User): Promise<Recipe> {
     let slug = slugify(createRecipeDto.label, { lower: true });
-
+  
     let originalSlug = slug;
     let counter = 2;
-
+  
     while (await this.recipeRepository.findOne({ where: { slug: slug } })) {
       slug = `${originalSlug}-${counter}`;
       counter++;
     }
-
+  
+    const category = await this.categoryRepository.findOne({ where: { id: createRecipeDto.categoryId } });
+  
+    if (!category) {
+      throw new NotFoundException(`Category with ID ${createRecipeDto.categoryId} not found`);
+    }
+  
     const recipe = this.recipeRepository.create({
       label: createRecipeDto.label,
       slug: slug,
       user,
+      category,
     });
-
+  
     await this.recipeRepository.save(recipe);
-
+  
     const recipeIngredients = [];
-
+  
     for (const ri of createRecipeDto.recipeIngredients) {
       try {
         const ingredient = await this.ingredientRepository.findOne({ where: { id: ri.ingredientId } });
@@ -48,36 +58,36 @@ export class RecipesService {
           console.warn(`Ingredient ID ${ri.ingredientId} not found. Skipping...`);
           continue;
         }
-
+  
         const recipeIngredient = this.recipeIngredientRepository.create({
           recipe,
           ingredient,
           quantity: ri.quantity,
         });
-
+  
         recipeIngredients.push(recipeIngredient);
       } catch (error) {
         console.error(`Error processing ingredient ID ${ri.ingredientId}: ${error.message}`);
       }
     }
-
+  
     if (recipeIngredients.length > 0) {
       await this.recipeIngredientRepository.save(recipeIngredients);
     }
-
+  
     if (createRecipeDto.steps && createRecipeDto.steps.length > 0) {
       recipe.steps = createRecipeDto.steps;
       await this.recipeRepository.save(recipe);
     }
-
+  
     return this.recipeRepository.findOne({
       where: { id: recipe.id },
-      relations: ['user', 'recipeIngredients', 'recipeIngredients.ingredient'],
+      relations: ['user', 'category', 'recipeIngredients', 'recipeIngredients.ingredient'],
     });
   }
 
   async findAll(): Promise<Recipe[]> {
-    return this.recipeRepository.find({ relations: ['user', 'recipeIngredients', 'recipeIngredients.ingredient'] });
+    return this.recipeRepository.find({ relations: ['user', 'category', 'recipeIngredients', 'recipeIngredients.ingredient'] });
   }
 
   async findOneByUsernameAndSlug(username: string, slug: string): Promise<Recipe> {
@@ -86,7 +96,7 @@ export class RecipesService {
         slug,
         user: { username },
       },
-      relations: ['user', 'recipeIngredients', 'recipeIngredients.ingredient'],
+      relations: ['user', 'category', 'recipeIngredients', 'recipeIngredients.ingredient'],
     });
 
     if (!recipe) throw new NotFoundException(`Recipe '${slug}' by '${username}' not found`);
