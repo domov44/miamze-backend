@@ -11,6 +11,7 @@ import { TagsModule } from './tags/tags.module';
 import { RecipesModule } from './recipes/recipes.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { RecipeIngredientModule } from './recipe-ingredient/recipe-ingredient.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { RecipeIngredientModule } from './recipe-ingredient/recipe-ingredient.mo
     RecipesModule,
     IngredientsModule,
     RecipeIngredientModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [
