@@ -11,6 +11,7 @@ import { Category } from '../category/entities/category.entity';
   imports: [TypeOrmModule.forFeature([Recipe, RecipeIngredient, Ingredient, Category])],
   controllers: [RecipesController],
   providers: [RecipesService],
+  exports: [RecipesService],
 })
 export class RecipesModule {}
 
