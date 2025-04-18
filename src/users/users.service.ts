@@ -12,9 +12,12 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    createUserDto.username = createUserDto.username.toLowerCase();
+    createUserDto.email = createUserDto.email.toLowerCase();
+
     const usernameExists = await this.userRepository.count({
       where: { username: createUserDto.username },
     });
@@ -66,7 +69,7 @@ export class UsersService {
       const saltOrRounds = 10;
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, saltOrRounds);
     }
-    
+
     if (updateUserDto.username) {
       const existingUser = await this.userRepository.findOne({
         where: { username: updateUserDto.username, id: Not(id) },
@@ -78,7 +81,7 @@ export class UsersService {
     await this.userRepository.update(id, updateUserDto);
     return this.findOneById(id);
   }
-  
+
   async remove(id: number, currentUserId: number): Promise<void> {
     if (id !== currentUserId) {
       throw new ForbiddenException("You don't have permission to delete this user.");
