@@ -85,7 +85,7 @@ export class User {
   @Column({ length: 150, nullable: false })
   password: string;
 
-  @Exclude()
+  @Expose({ groups: [GROUP_USER, GROUP_ALL_USERS] })
   @OneToMany(() => Recipe, (recipe) => recipe.user)
   recipes: Recipe[];
 

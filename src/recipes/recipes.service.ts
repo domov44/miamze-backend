@@ -47,7 +47,7 @@ export class RecipesService {
     const recipe = this.recipeRepository.create({
       label: createRecipeDto.label,
       slug: slug,
-      user: { id: userId }, // 👈 on crée la relation
+      user: { id: userId },
       category,
     });
 
