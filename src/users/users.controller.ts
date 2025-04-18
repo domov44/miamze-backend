@@ -49,9 +49,9 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Get('/me/recipes')
-    @SerializeOptions({
-      groups: [GROUP_TAG, GROUP_CATEGORY, GROUP_USER, GROUP_ALL_USERS],
-    })
+  @SerializeOptions({
+    groups: [GROUP_TAG, GROUP_CATEGORY, GROUP_USER, GROUP_ALL_USERS],
+  })
   @ApiBearerAuth()
   @ApiCreatedResponse({
     description: 'All recipes of the current user',
@@ -102,4 +102,26 @@ export class UsersController {
       throw new HttpException('Failed to delete user', error);
     }
   }
+
+  @Get(':username')
+  @SerializeOptions({
+    groups: [GROUP_USER, GROUP_CATEGORY, GROUP_TAG, GROUP_ALL_USERS],
+  })
+  @ApiCreatedResponse({
+    description: 'User and their recipes retrieved successfully',
+    type: User,
+  })
+  async getUserAndRecipes(@Param('username') username: string): Promise<User> {
+    const user = await this.usersService.findOne(username);
+
+    if (!user) {
+      throw new NotFoundException(`User '${username}' not found`);
+    }
+
+    const recipes = await this.recipesService.findByUser(user.id);
+    user.recipes = recipes;
+
+    return user;
+  }
 }
+

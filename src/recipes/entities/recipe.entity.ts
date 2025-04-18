@@ -51,7 +51,7 @@ export class Recipe {
     example: '2023-10-01T10:00:00Z',
   })
   @CreateDateColumn({ name: 'created_at' })
-  @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES] })
+  @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
   createdAt: Date;
 
   @ApiProperty({
@@ -59,7 +59,7 @@ export class Recipe {
     example: '2023-10-05T14:00:00Z',
   })  
   @UpdateDateColumn({ name: 'updated_at' })
-  @Expose({ groups: [GROUP_CATEGORY] })
+  @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
   updatedAt: Date;
 
   @ApiProperty({
