@@ -85,6 +85,14 @@ export class User {
   @Column({ length: 150, nullable: false })
   password: string;
 
+  @ApiProperty({
+    description: 'Description de la recette',
+    example: 'Cette recette de tarte aux pommes a été rapportées par ma grand mère... etc'
+  })
+  @Column({ length: 250, nullable: true })
+  @Expose({ groups: [GROUP_USER, GROUP_ALL_USERS] })
+  bio: string;
+
   @Expose({ groups: [GROUP_USER, GROUP_ALL_USERS] })
   @OneToMany(() => Recipe, (recipe) => recipe.user)
   recipes: Recipe[];
