@@ -18,6 +18,7 @@ export class RecipesController {
     groups: [GROUP_TAG, GROUP_CATEGORY, GROUP_USER, GROUP_ALL_USERS],
   })
   create(@Body() createRecipeDto: CreateRecipeDto, @Request() req) {
+    console.log(createRecipeDto)
     return this.recipesService.create(createRecipeDto, req.user.sub);
   }
 
