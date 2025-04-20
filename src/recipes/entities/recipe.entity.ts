@@ -70,6 +70,14 @@ export class Recipe {
   @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
   slug: string;
 
+  @ApiProperty({
+    description: 'Description de la recette',
+    example: 'Cette recette de tarte aux pommes a été rapportées par ma grand mère... etc'
+  })
+  @Column({ length: 500 , nullable: true})
+  @Expose({ groups: [GROUP_CATEGORY, GROUP_ALL_CATEGORIES, GROUP_TAG, GROUP_ALL_TAGS] })
+  description: string;
+
   @ApiProperty({ type: () => Category })
   @JoinColumn({ name: 'categoryId' })
   @ManyToOne(() => Category, (category) => category.recipes, { nullable: true, onDelete: 'CASCADE' })

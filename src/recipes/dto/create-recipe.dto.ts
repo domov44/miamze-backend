@@ -30,6 +30,14 @@ export class CreateRecipeDto {
   @IsNotEmpty()
   label: string;
 
+  @IsString()
+  @IsNotEmpty()
+  image: string;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
   @IsInt()
   @IsNotEmpty()
   categoryId: number;  

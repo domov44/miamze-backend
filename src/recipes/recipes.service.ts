@@ -25,6 +25,8 @@ export class RecipesService {
 
   async create(createRecipeDto: CreateRecipeDto, userId: number): Promise<Recipe> {
 
+    console.log(createRecipeDto)
+
     let slug = slugify(createRecipeDto.label, { lower: true });
     const originalSlug = slug;
     let counter = 2;
@@ -46,6 +48,8 @@ export class RecipesService {
 
     const recipe = this.recipeRepository.create({
       label: createRecipeDto.label,
+      description: createRecipeDto.description,
+      image: createRecipeDto.image,
       slug: slug,
       user: { id: userId },
       category,
